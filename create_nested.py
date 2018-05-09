@@ -12,9 +12,9 @@ g.delete_all()
 # VCPU. Each will also have 2PFs, one public and one private, and each PF will
 # provide 8 VFs. We will also make each successive compute node have fewer and
 # fewer resources available.
-tx = g.begin()
 
 for i in range(NODE_COUNT):
+    tx = g.begin()
     ratio = i / NODE_COUNT
     c = create_node(tx, "ComputeNode", "cn", i)
     d = create_node(tx, "DISK_GB", "disk", i, total=2048,
@@ -31,14 +31,14 @@ for i in range(NODE_COUNT):
     v = create_node(tx, "VF", "vfpriv", i, total=8, used=int((8*ratio)),
             network="private")
     tx.create(Relationship(c, "PROVIDES", v))
-tx.commit()
+    tx.commit()
 
 # Create NODE_COUNT compute nodes, each with 2 NUMA nodes. The compute node
 # will suppply 2048 DISK_GB; and each NUMA node will supply 2048 MEMORY_MB and
 # 4 VCPU. Each NUMA node will also have 2PFs, one public and one private, and
 # each PF will provide 8 VFs.
-tx = g.begin()
 for i in range(NODE_COUNT):
+    tx = g.begin()
     ratio = i / NODE_COUNT
     c = create_node(tx, "ComputeNode", "cnNuma", i)
     d = create_node(tx, "DISK_GB", "diskNuma", i, total=2048,
@@ -61,10 +61,4 @@ for i in range(NODE_COUNT):
         v = create_node(tx, "VF", "vfpubNuma%s" % numaPrefix, i, total=8,
                 used=int((8*ratio)), network="public")
         tx.create(Relationship(n, "PROVIDES", v))
-tx.commit()
-
-#match (v:VF {name: "vfpub0008"}) set v.used=7 return v
-#match p=(c:ComputeNode)-[*]-(v:VF network: "public") where v.total - v.used > 4 return p
-
-#match (c:ComputeNode)-[*]->(v:VF) where v.total - v.used > 5
-#with c
+    tx.commit()
