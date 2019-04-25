@@ -14,7 +14,7 @@ MATCH (cnode:ComputeNode)-[*]-(disk:DISK_GB)
 WHERE disk.total - disk.used > 2000
 RETURN cnode, disk, ram
 """
-result = g.data(query)
+result = g.run(query).data()
 node_disk = [(node["cnode"]["name"], node["disk"]["name"])
         for node in result]
 print()
@@ -30,7 +30,7 @@ MATCH (cnode:ComputeNode)-[*]-(disk:DISK_GB)
 WHERE disk.total - disk.used > 8000
 RETURN cnode, disk, ram
 """
-result = g.data(query)
+result = g.run(query).data()
 node_disk = [(node["cnode"]["name"], node["disk"]["name"])
         for node in result]
 print()
@@ -46,7 +46,7 @@ MATCH (cnode:ComputeNode)-[*]-(disk:DISK_GB)
 WHERE disk.total - disk.used > 20000
 RETURN cnode, disk, ram
 """
-result = g.data(query)
+result = g.run(query).data()
 node_disk = [(node["cnode"]["name"], node["disk"]["name"])
         for node in result]
 print()

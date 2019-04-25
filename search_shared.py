@@ -15,7 +15,7 @@ query = """
     where gb.total - gb.used > 2000
     return cnode, gb
 """
-results = g.data(query)
+results = g.run(query).data()
 print("With a small disk amount requested")
 pprint([(result["cnode"], result["gb"]) for result in results])
 print()
@@ -26,7 +26,7 @@ query = """
     where gb.total - gb.used > 8000
     return cnode, gb
 """
-results = g.data(query)
+results = g.run(query).data()
 print("With a medium-sized disk amount requested")
 pprint([(result["cnode"], result["gb"]) for result in results])
 print()
@@ -37,6 +37,6 @@ query = """
     where gb.total - gb.used > 50000
     return cnode, gb
 """
-results = g.data(query)
+results = g.run(query).data()
 print("With a large disk amount requested")
 pprint([(result["cnode"], result["gb"]) for result in results])

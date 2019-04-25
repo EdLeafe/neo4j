@@ -5,13 +5,16 @@ from utils import connect
 # Get the connection to Node4j
 g = connect()
 
+#import pudb
+#pudb.set_trace()
+
 # Simple query
 query = """
-MATCH (cn:ComputeNode)-[]->(ram:MEMORY_MB)
+MATCH (cn:ComputeNode)-[:PROVIDES*0..1]->(nm)-[:PROVIDES]->(ram:MEMORY_MB)
 WHERE ram.total - ram.used > 2000
-RETURN cn, ram
+RETURN cn, nm, ram
 """
-result = g.data(query)
+result = g.run(query).data()
 pprint(result)
 
 # Query on multiple factors
@@ -23,5 +26,5 @@ MATCH (cnode:ComputeNode)-[*]->(disk:DISK_GB)
 WHERE disk.total - disk.used > 2000
 RETURN p, cnode, disk, ram
 """
-result = g.data(query)
-pprint(result)
+result = g.run(query)
+pprint(result.data())
